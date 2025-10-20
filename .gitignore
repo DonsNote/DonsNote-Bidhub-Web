@@ -12,7 +12,43 @@ node_modules/
 # Env
 .env
 .env.local
+.env.production
+.env.development
 
-# Next
+# Next.js
 .next/
-.eslintrc.json
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Testing
+coverage/
+.nyc_output/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+
+# Temporary files
+.tmp/
+temp/
