@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { authApi } from '@/lib/api/auth.api';
 import { bidApi, Bid, Listing } from '@/lib/api/bid.api';
 import Header from '@/components/Header';
@@ -225,12 +226,23 @@ export default function MyBidPage() {
                   >
                     <div
                       style={{
+                        position: 'relative',
                         width: '40px',
                         height: '40px',
                         borderRadius: '20px',
-                        backgroundColor: '#F0F2F5'
+                        backgroundColor: '#F0F2F5',
+                        overflow: 'hidden'
                       }}
-                    />
+                    >
+                      {item.image && (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          style={{ objectFit: 'cover' }}
+                        />
+                      )}
+                    </div>
                   </div>
 
                   {/* Item Name */}
@@ -482,12 +494,23 @@ export default function MyBidPage() {
                   >
                     <div
                       style={{
+                        position: 'relative',
                         width: '40px',
                         height: '40px',
                         borderRadius: '20px',
-                        backgroundColor: '#F0F2F5'
+                        backgroundColor: '#F0F2F5',
+                        overflow: 'hidden'
                       }}
-                    />
+                    >
+                      {item.image && (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          style={{ objectFit: 'cover' }}
+                        />
+                      )}
+                    </div>
                   </div>
 
                   {/* Item Name */}
