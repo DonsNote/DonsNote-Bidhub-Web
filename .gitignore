@@ -1,0 +1,7 @@
+# Mac
+.DS_Store
+
+# Claude Code
+.claude/
+.serena/
+.mcp.json
