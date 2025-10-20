@@ -29,6 +29,8 @@ export default function AuctionDetailPage() {
   const [tradeTitle, setTradeTitle] = useState('');
   const [tradeDescription, setTradeDescription] = useState('');
   const [tradeValue, setTradeValue] = useState('');
+  const [tradeImageUrl, setTradeImageUrl] = useState('');
+  const [tradeImageFile, setTradeImageFile] = useState<File | null>(null);
   const [submittingTrade, setSubmittingTrade] = useState(false);
 
   // Real-time countdown state
@@ -160,6 +162,33 @@ export default function AuctionDetailPage() {
     }
   };
 
+  // Handle image file selection
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file');
+        return;
+      }
+
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image size must be less than 5MB');
+        return;
+      }
+
+      setTradeImageFile(file);
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setTradeImageUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   // Handle trade offer submission
   const handleSubmitTradeOffer = async () => {
     if (!user) {
@@ -187,7 +216,8 @@ export default function AuctionDetailPage() {
         user.id,
         tradeTitle,
         tradeDescription,
-        estimatedValue
+        estimatedValue,
+        tradeImageUrl || undefined
       );
 
       // Reload trade offers
@@ -198,6 +228,8 @@ export default function AuctionDetailPage() {
       setTradeTitle('');
       setTradeDescription('');
       setTradeValue('');
+      setTradeImageUrl('');
+      setTradeImageFile(null);
 
       alert('Trade offer submitted successfully!');
     } catch (error: any) {
@@ -614,32 +646,77 @@ export default function AuctionDetailPage() {
                   gap: '24px',
                   padding: '56px 24px',
                   border: '2px dashed #DBE0E5',
-                  borderRadius: '8px'
+                  borderRadius: '8px',
+                  position: 'relative'
                 }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                    <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#121417', fontFamily: 'Work Sans', textAlign: 'center' }}>
-                      Upload Item Photo
-                    </h3>
-                    <p style={{ fontSize: '14px', color: '#121417', fontFamily: 'Work Sans', textAlign: 'center' }}>
-                      Drag and drop or click to upload
-                    </p>
-                  </div>
-                  <button style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: '0 16px',
-                    width: '84px',
-                    height: '40px',
-                    backgroundColor: '#F0F2F5',
-                    borderRadius: '8px',
-                    border: 'none',
-                    cursor: 'pointer'
-                  }}>
-                    <span style={{ fontSize: '14px', fontWeight: 700, color: '#121417', fontFamily: 'Work Sans', textAlign: 'center' }}>
-                      Upload
-                    </span>
-                  </button>
+                  {tradeImageUrl ? (
+                    <>
+                      {/* Image Preview */}
+                      <div style={{ position: 'relative', width: '200px', height: '200px', borderRadius: '8px', overflow: 'hidden', backgroundColor: '#F0F2F5' }}>
+                        <Image
+                          src={tradeImageUrl}
+                          alt="Trade offer preview"
+                          fill
+                          style={{ objectFit: 'cover' }}
+                        />
+                      </div>
+                      <button
+                        onClick={() => {
+                          setTradeImageUrl('');
+                          setTradeImageFile(null);
+                        }}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          padding: '0 16px',
+                          height: '40px',
+                          backgroundColor: '#F0F2F5',
+                          borderRadius: '8px',
+                          border: 'none',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <span style={{ fontSize: '14px', fontWeight: 700, color: '#121417', fontFamily: 'Work Sans', textAlign: 'center' }}>
+                          Remove
+                        </span>
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                        <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#121417', fontFamily: 'Work Sans', textAlign: 'center' }}>
+                          Upload Item Photo
+                        </h3>
+                        <p style={{ fontSize: '14px', color: '#121417', fontFamily: 'Work Sans', textAlign: 'center' }}>
+                          Click to upload (max 5MB)
+                        </p>
+                      </div>
+                      <label htmlFor="trade-image-input" style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '0 16px',
+                        width: '84px',
+                        height: '40px',
+                        backgroundColor: '#F0F2F5',
+                        borderRadius: '8px',
+                        border: 'none',
+                        cursor: 'pointer'
+                      }}>
+                        <span style={{ fontSize: '14px', fontWeight: 700, color: '#121417', fontFamily: 'Work Sans', textAlign: 'center' }}>
+                          Upload
+                        </span>
+                      </label>
+                      <input
+                        id="trade-image-input"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageSelect}
+                        style={{ display: 'none' }}
+                      />
+                    </>
+                  )}
                 </div>
               </div>
 
