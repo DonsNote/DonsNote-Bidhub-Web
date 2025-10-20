@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
 import { authApi } from '@/lib/api/auth.api';
 import { bidApi, Bid, Listing } from '@/lib/api/bid.api';
@@ -204,13 +205,16 @@ export default function MyBidPage() {
 
               {/* Table Body */}
               {biddingHistory.map((item) => (
-                <div
+                <Link
                   key={item.id}
+                  href={`/auction/${item.itemId}`}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     borderTop: '1px solid #E5E8EB',
-                    minHeight: '72px'
+                    minHeight: '72px',
+                    textDecoration: 'none',
+                    cursor: 'pointer'
                   }}
                 >
                   {/* Image */}
@@ -375,7 +379,7 @@ export default function MyBidPage() {
                       </button>
                     )}
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -383,7 +387,7 @@ export default function MyBidPage() {
 
         {/* My Listings Section */}
         <section style={{ marginTop: '8px' }}>
-          <div style={{ padding: '20px 16px 12px' }}>
+          <div style={{ padding: '20px 16px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h2
               style={{
                 fontSize: '22px',
@@ -396,6 +400,25 @@ export default function MyBidPage() {
             >
               My Listings
             </h2>
+            <button
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '0 24px',
+                height: '40px',
+                backgroundColor: '#268CF5',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: 700,
+                fontFamily: 'Work Sans',
+                cursor: 'pointer'
+              }}
+            >
+              Exhibit
+            </button>
           </div>
 
           <div style={{ padding: '12px 16px' }}>
@@ -472,13 +495,16 @@ export default function MyBidPage() {
 
               {/* Table Body */}
               {myListings.map((item) => (
-                <div
+                <Link
                   key={item.id}
+                  href={`/auction/${item.id}`}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
                     borderTop: '1px solid #E5E8EB',
-                    minHeight: '72px'
+                    minHeight: '72px',
+                    textDecoration: 'none',
+                    cursor: 'pointer'
                   }}
                 >
                   {/* Image */}
@@ -615,7 +641,7 @@ export default function MyBidPage() {
                       </span>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

@@ -9,6 +9,7 @@ import { bidApi, BidHistory } from '@/lib/api/bid.api';
 import { authApi } from '@/lib/api/auth.api';
 import { tradeOfferApi, TradeOffer } from '@/lib/api/tradeOffer.api';
 import type { Auction } from '@/types/auction';
+import { supabase } from '@/lib/supabase/client';
 
 export default function AuctionDetailPage() {
   const params = useParams();
@@ -95,6 +96,74 @@ export default function AuctionDetailPage() {
     loadAuctionData();
   }, [loadAuctionData]);
 
+  // Subscribe to real-time updates for items table
+  useEffect(() => {
+    if (!itemId) return;
+
+    // Subscribe to changes on the specific item
+    const channel = supabase
+      .channel(`item-${itemId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'items',
+          filter: `id=eq.${itemId}`
+        },
+        (payload) => {
+          console.log('Real-time update received:', payload);
+          // Update auction data with new values
+          if (payload.new && auction) {
+            setAuction({
+              ...auction,
+              current_price: payload.new.current_price,
+              highest_bidder_id: payload.new.highest_bidder_id
+            });
+          }
+        }
+      )
+      .subscribe();
+
+    // Cleanup subscription on unmount
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [itemId, auction]);
+
+  // Subscribe to real-time updates for bids table
+  useEffect(() => {
+    if (!itemId) return;
+
+    // Subscribe to new bids
+    const channel = supabase
+      .channel(`bids-${itemId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'bids',
+          filter: `item_id=eq.${itemId}`
+        },
+        async (payload) => {
+          console.log('New bid received:', payload);
+          // Reload bid history
+          try {
+            const bidsData = await bidApi.getItemBids(itemId);
+            setBidHistory(bidsData);
+          } catch (error) {
+            console.log('Failed to reload bids');
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [itemId]);
+
   // Real-time countdown timer
   useEffect(() => {
     if (!auction?.end_time) return;
@@ -148,8 +217,12 @@ export default function AuctionDetailPage() {
 
       await auctionApi.placeBid(itemId, bidValue, user.id);
 
-      // Reload auction data to get updated info
+      // Reload auction data and bid history to get updated info
       await loadAuctionData();
+
+      // Explicitly reload bid history
+      const bidsData = await bidApi.getItemBids(itemId);
+      setBidHistory(bidsData);
 
       // Clear bid input
       setBidAmount('');
@@ -517,8 +590,8 @@ export default function AuctionDetailPage() {
                 {tradeOffers.length > 0 ? (
                   <div style={{ display: 'flex', gap: '12px', overflowX: 'auto' }}>
                     {tradeOffers.map((offer) => (
-                      <div key={offer.id} style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: '0 0 auto', minWidth: '200px' }}>
-                        <div style={{ position: 'relative', height: '135px', borderRadius: '8px', backgroundColor: '#F0F2F5', overflow: 'hidden' }}>
+                      <div key={offer.id} style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: '0 0 auto', width: '200px' }}>
+                        <div style={{ position: 'relative', width: '200px', height: '135px', borderRadius: '8px', backgroundColor: '#F0F2F5', overflow: 'hidden' }}>
                           {offer.imageUrl && (
                             <Image
                               src={offer.imageUrl}
