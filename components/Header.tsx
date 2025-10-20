@@ -105,21 +105,37 @@ export default function Header() {
           {/* Navigation */}
           <nav className="flex items-center justify-center" style={{ gap: '36px' }}>
             {user && (
-              <Link
-                href="/my-bid"
-                className="font-medium"
-                style={{
-                  fontSize: '14px',
-                  lineHeight: '21px',
-                  color: '#121417',
-                  fontFamily: 'Work Sans'
-                }}
-              >
-                My Bid
-              </Link>
+              <>
+                <Link
+                  href="/my-bid"
+                  className="font-medium"
+                  style={{
+                    fontSize: '14px',
+                    lineHeight: '21px',
+                    color: '#121417',
+                    fontFamily: 'Work Sans'
+                  }}
+                >
+                  My Bid
+                </Link>
+                <Link
+                  href="/exhibit"
+                  className="font-medium"
+                  style={{
+                    fontSize: '14px',
+                    lineHeight: '21px',
+                    color: '#121417',
+                    fontFamily: 'Work Sans'
+                  }}
+                >
+                  Exhibit
+                </Link>
+              </>
             )}
-            <Link
-              href="/how-it-works"
+            <a
+              href="https://www.github.com/donsnote"
+              target="_blank"
+              rel="noopener noreferrer"
               className="font-medium"
               style={{
                 fontSize: '14px',
@@ -129,9 +145,11 @@ export default function Header() {
               }}
             >
               How it Works
-            </Link>
-            <Link
-              href="/contact"
+            </a>
+            <a
+              href="https://www.github.com/donsnote"
+              target="_blank"
+              rel="noopener noreferrer"
               className="font-medium"
               style={{
                 fontSize: '14px',
@@ -141,7 +159,7 @@ export default function Header() {
               }}
             >
               Contact
-            </Link>
+            </a>
           </nav>
 
           {/* Login / Logout Button / Icons */}

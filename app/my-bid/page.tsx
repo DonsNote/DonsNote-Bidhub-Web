@@ -401,6 +401,7 @@ export default function MyBidPage() {
               My Listings
             </h2>
             <button
+              onClick={() => router.push('/exhibit')}
               style={{
                 display: 'flex',
                 justifyContent: 'center',

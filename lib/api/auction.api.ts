@@ -55,4 +55,35 @@ export const auctionApi = {
     const data: ApiResponse<Auction> = await response.json();
     return data.data || null;
   },
+
+  // 경매 생성
+  createAuction: async (auctionData: {
+    title: string;
+    description: string;
+    starting_price: number;
+    reserve_price?: number;
+    image_urls: string[];
+    category_id?: string;
+    end_time: string;
+    seller_id: string;
+    condition?: string;
+    location?: string;
+    shipping_cost?: number;
+  }): Promise<Auction | null> => {
+    const response = await fetch(`${API_BASE_URL}/auctions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(auctionData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to create auction');
+    }
+
+    const data: ApiResponse<Auction> = await response.json();
+    return data.data || null;
+  },
 };
