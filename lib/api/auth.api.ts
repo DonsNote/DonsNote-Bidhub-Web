@@ -45,13 +45,17 @@ export const authApi = {
 
   // 현재 사용자 가져오기
   async getCurrentUser() {
-    const { data: { user }, error } = await supabase.auth.getUser();
+    try {
+      const { data: { user }, error } = await supabase.auth.getUser();
 
-    if (error) {
-      throw error;
+      if (error || !user) {
+        return null;
+      }
+
+      return user;
+    } catch (error) {
+      return null;
     }
-
-    return user;
   },
 
   // 세션 가져오기

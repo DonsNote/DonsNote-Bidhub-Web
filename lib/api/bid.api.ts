@@ -78,14 +78,15 @@ export const bidApi = {
       const response = await fetch(`${API_BASE_URL}/bids/item/${itemId}`);
 
       if (!response.ok) {
-        throw new Error('Failed to fetch item bids');
+        console.log('No bid history available for this item');
+        return [];
       }
 
       const data = await response.json();
       return data.data || [];
     } catch (error) {
-      console.error('Error fetching item bids:', error);
-      throw error;
+      console.log('Failed to fetch item bids, returning empty array');
+      return [];
     }
   }
 };

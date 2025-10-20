@@ -25,8 +25,14 @@ export const auctionApi = {
   },
 
   // 특정 경매 조회
-  getAuctionById: async (id: number): Promise<Auction | null> => {
+  getAuctionById: async (id: string | number): Promise<Auction | null> => {
     const response = await fetch(`${API_BASE_URL}/auctions/${id}`);
+
+    if (!response.ok) {
+      console.error('Failed to fetch auction:', response.status);
+      return null;
+    }
+
     const data: ApiResponse<Auction> = await response.json();
     return data.data || null;
   },
