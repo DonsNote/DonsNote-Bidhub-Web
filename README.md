@@ -5,23 +5,24 @@ BidHub의 프론트엔드 웹 애플리케이션입니다. Next.js 15와 React 1
 ## 🛠 기술 스택
 
 ### 핵심 프레임워크
-- **Next.js**: v15.1.6 (App Router)
-- **React**: v19.0.0
-- **TypeScript**: v5.x
+- **Next.js**: v15.5.6 (App Router)
+- **React**: v19.2.0
+- **TypeScript**: v5.9.3
 
 ### UI 및 스타일링
-- **Tailwind CSS**: v3.4.1 (유틸리티 기반 스타일링)
-- **Headless UI**: v2.2.0 (접근성 높은 UI 컴포넌트)
-- **Heroicons**: v2.2.0 (아이콘)
-- **clsx**: v2.1.1 (조건부 클래스명)
+- **Tailwind CSS**: v4.1.14 (유틸리티 기반 스타일링)
+- **PostCSS**: v8.5.6
+- **Autoprefixer**: v10.4.21
+- **@tailwindcss/postcss**: v4.1.15
 
 ### 인증 및 데이터
-- **Supabase**: v2.47.10 (인증, 데이터베이스, 실시간 구독)
-- **@supabase/ssr**: v0.5.2 (서버 사이드 렌더링 지원)
+- **@supabase/supabase-js**: v2.75.1 (인증, 데이터베이스, 실시간 구독)
 
-### 기타
-- **next/image**: 이미지 최적화
-- **date-fns** 또는 내장 Date API: 시간 처리
+### 개발 도구
+- **ESLint**: v9.38.0
+- **eslint-config-next**: v15.5.6
+- **@types/node**: v24.8.1
+- **@types/react**: v19.2.2
 
 ## 📁 프로젝트 구조
 
@@ -35,28 +36,65 @@ Bidhub-Web/
 │   │   └── page.tsx              # 경매 출품 페이지
 │   ├── login/
 │   │   └── page.tsx              # 로그인 페이지
+│   ├── signup/
+│   │   └── page.tsx              # 회원가입 페이지
 │   ├── my-bid/
 │   │   └── page.tsx              # 내 입찰/출품 관리 페이지
 │   ├── layout.tsx                # 루트 레이아웃
 │   ├── page.tsx                  # 홈페이지 (메인)
-│   └── globals.css               # 전역 스타일
+│   ├── globals.css               # 전역 스타일
+│   ├── error.tsx                 # 에러 페이지
+│   └── not-found.tsx             # 404 페이지
 ├── components/
+│   ├── ui/
+│   │   ├── Button.tsx            # 버튼 컴포넌트
+│   │   ├── Input.tsx             # 입력 컴포넌트
+│   │   ├── TextArea.tsx          # 텍스트 영역 컴포넌트
+│   │   ├── Select.tsx            # 선택 컴포넌트
+│   │   ├── Checkbox.tsx          # 체크박스 컴포넌트
+│   │   ├── Modal.tsx             # 모달 컴포넌트
+│   │   ├── ConfirmDialog.tsx     # 확인 대화상자
+│   │   ├── FilterPanel.tsx       # 필터 패널
+│   │   ├── ImageUpload.tsx       # 이미지 업로드
+│   │   ├── ImageLightbox.tsx     # 이미지 라이트박스
+│   │   ├── SearchInput.tsx       # 검색 입력
+│   │   └── index.ts              # UI 컴포넌트 exports
 │   ├── AuctionCard.tsx           # 경매 아이템 카드
 │   ├── Header.tsx                # 헤더 네비게이션
-│   └── ...
+│   ├── Footer.tsx                # 푸터
+│   ├── SearchBar.tsx             # 검색 바
+│   ├── NotificationDropdown.tsx  # 알림 드롭다운
+│   ├── ProtectedRoute.tsx        # 보호된 라우트 컴포넌트
+│   ├── Loading.tsx               # 로딩 컴포넌트
+│   └── ErrorBoundary.tsx         # 에러 바운더리
 ├── lib/
 │   ├── api/
 │   │   ├── auction.api.ts        # 경매 API 클라이언트
 │   │   ├── auth.api.ts           # 인증 API 클라이언트
-│   │   └── bid.api.ts            # 입찰 API 클라이언트
-│   └── supabase/
-│       └── client.ts             # Supabase 클라이언트 설정
+│   │   ├── bid.api.ts            # 입찰 API 클라이언트
+│   │   ├── notification.api.ts   # 알림 API 클라이언트
+│   │   └── tradeOffer.api.ts     # 트레이드 오퍼 API 클라이언트
+│   ├── supabase/
+│   │   └── client.ts             # Supabase 클라이언트 설정
+│   ├── context/
+│   │   └── AuthContext.tsx       # 인증 컨텍스트
+│   └── utils/
+│       ├── constants.ts          # 상수 정의
+│       ├── format.ts             # 포맷 유틸리티
+│       ├── imageUpload.ts        # 이미지 업로드 유틸리티
+│       ├── validation.ts         # 유효성 검증
+│       └── index.ts              # 유틸리티 exports
+├── types/
+│   └── *.ts                      # TypeScript 타입 정의
 ├── public/
 │   └── images/                   # 정적 이미지 파일
 ├── .env.local                    # 환경 변수 (git ignored)
+├── .env.example                  # 환경 변수 예시
 ├── tailwind.config.ts            # Tailwind 설정
 ├── next.config.ts                # Next.js 설정
-├── tsconfig.json
+├── postcss.config.mjs            # PostCSS 설정
+├── tsconfig.json                 # TypeScript 설정
+├── .eslintrc.json                # ESLint 설정
 └── package.json
 ```
 
@@ -80,8 +118,15 @@ Bidhub-Web/
 - 이메일/비밀번호 로그인
 - Supabase Auth 사용
 - 로그인 후 메인 페이지로 리다이렉트
+- 회원가입 페이지 링크
 
-### 4. My Bid 페이지 (`/my-bid`)
+### 4. 회원가입 페이지 (`/signup`)
+- 이메일/비밀번호 회원가입
+- Supabase Auth 사용
+- 입력 검증 (이메일 형식, 비밀번호 강도)
+- 가입 후 로그인 페이지로 리다이렉트
+
+### 5. My Bid 페이지 (`/my-bid`)
 - **Bidding History**: 내가 입찰한 경매 목록
   - 입찰 상태 (winning, outbid, lost)
   - 내 입찰가 vs 현재가
@@ -90,7 +135,7 @@ Bidhub-Web/
   - 최고 입찰가, 입찰 수, 조회 수
   - Exhibit 버튼 (새 출품)
 
-### 5. 출품 페이지 (`/exhibit`)
+### 6. 출품 페이지 (`/exhibit`)
 - 경매 아이템 등록 폼
   - 제목, 설명
   - 시작가, 희망가 (선택)
@@ -163,8 +208,28 @@ export const bidApi = {
 ```typescript
 export const authApi = {
   login(email: string, password: string): Promise<User>
+  signup(email: string, password: string): Promise<User>
   logout(): Promise<void>
   getCurrentUser(): Promise<User | null>
+}
+```
+
+#### Notification API (`lib/api/notification.api.ts`)
+```typescript
+export const notificationApi = {
+  getNotifications(filters?: {...}): Promise<Notification[]>
+  getUnreadCount(): Promise<number>
+  markAsRead(id: string): Promise<void>
+  markAllAsRead(): Promise<void>
+  deleteNotification(id: string): Promise<void>
+}
+```
+
+#### Trade Offer API (`lib/api/tradeOffer.api.ts`)
+```typescript
+export const tradeOfferApi = {
+  getTradeOffers(itemId: string): Promise<TradeOffer[]>
+  createTradeOffer(data: {...}): Promise<TradeOffer>
 }
 ```
 
@@ -231,7 +296,87 @@ useEffect(() => {
 
 ## 🎯 주요 기능
 
-### 1. 태그 입력 시스템
+### 1. UI 컴포넌트 시스템
+재사용 가능한 UI 컴포넌트 라이브러리:
+```typescript
+// components/ui/
+- Button: 다양한 스타일의 버튼 (primary, secondary, danger)
+- Input: 텍스트 입력 컴포넌트
+- TextArea: 텍스트 영역 컴포넌트
+- Select: 드롭다운 선택 컴포넌트
+- Checkbox: 체크박스 컴포넌트
+- Modal: 모달 대화상자
+- ConfirmDialog: 확인 대화상자
+- FilterPanel: 필터 패널
+- ImageUpload: 이미지 업로드 (드래그 앤 드롭)
+- ImageLightbox: 이미지 확대 보기
+- SearchInput: 검색 입력
+```
+
+### 2. 알림 시스템
+실시간 알림 기능:
+```typescript
+// NotificationDropdown 컴포넌트
+- 헤더에 알림 아이콘 표시
+- 읽지 않은 알림 개수 배지
+- 드롭다운 알림 목록
+- 알림 타입별 아이콘 및 스타일
+- 읽음 처리 및 삭제 기능
+- 실시간 알림 업데이트
+```
+
+### 3. 인증 컨텍스트
+전역 인증 상태 관리:
+```typescript
+// lib/context/AuthContext.tsx
+const AuthProvider: React.FC
+const useAuth: () => AuthContextType
+
+// 기능:
+- 로그인/로그아웃 상태 관리
+- 사용자 정보 전역 제공
+- 보호된 라우트 처리
+- 자동 세션 유지
+```
+
+### 4. 이미지 업로드 시스템
+드래그 앤 드롭 이미지 업로드:
+```typescript
+// components/ui/ImageUpload.tsx
+- 드래그 앤 드롭 지원
+- 파일 선택 버튼
+- 미리보기 표시
+- 이미지 삭제 기능
+- 최대 개수 제한 (10개)
+- 파일 크기 검증
+```
+
+### 5. 검색 및 필터링
+경매 아이템 검색 및 필터:
+```typescript
+// SearchBar 컴포넌트
+- 키워드 검색
+- 카테고리 필터
+- 가격 범위 필터
+- 상태 필터 (진행 중, 종료됨)
+- 정렬 옵션 (최신순, 마감 임박, 인기순)
+```
+
+### 6. 에러 처리
+전역 에러 처리:
+```typescript
+// ErrorBoundary 컴포넌트
+- 컴포넌트 레벨 에러 캡처
+- 에러 페이지 표시
+- 에러 로깅
+- 복구 옵션 제공
+
+// error.tsx, not-found.tsx
+- 커스텀 에러 페이지
+- 404 페이지
+```
+
+### 7. 태그 입력 시스템
 ```typescript
 const [tags, setTags] = useState<string[]>([]);
 const [tagInput, setTagInput] = useState('');
@@ -254,7 +399,26 @@ const handleTagInputKeyDown = (e: React.KeyboardEvent) => {
 - X 버튼으로 개별 삭제
 - 빈 입력에서 Backspace로 마지막 태그 삭제
 
-### 2. 이미지 업로드 (드래그 앤 드롭)
+### 8. 유틸리티 함수
+공통 유틸리티 함수들:
+```typescript
+// lib/utils/
+- format.ts: 날짜, 시간, 가격 포맷팅
+- validation.ts: 폼 입력 검증
+- imageUpload.ts: 이미지 업로드 처리
+- constants.ts: 상수 정의
+```
+
+### 9. 보호된 라우트
+인증이 필요한 페이지 보호:
+```typescript
+// ProtectedRoute 컴포넌트
+- 로그인 상태 확인
+- 미인증 시 로그인 페이지로 리다이렉트
+- 로딩 상태 처리
+```
+
+### 10. 이미지 업로드 (드래그 앤 드롭)
 ```typescript
 const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
   e.preventDefault();
@@ -278,7 +442,7 @@ const handleImageFiles = (files: File[]) => {
 };
 ```
 
-### 3. 남은 시간 계산
+### 11. 남은 시간 계산
 ```typescript
 const calculateTimeLeft = (endTime: string | null): string => {
   if (!endTime) return 'Time expired';
@@ -299,7 +463,7 @@ const calculateTimeLeft = (endTime: string | null): string => {
 };
 ```
 
-### 4. 입찰 상태 표시
+### 12. 입찰 상태 표시
 ```typescript
 const getBidStatus = (bid: Bid) => {
   if (bid.itemStatus !== 'active') {
@@ -311,8 +475,34 @@ const getBidStatus = (bid: Bid) => {
 
 ## 🎨 스타일링
 
-### Tailwind CSS
-유틸리티 클래스 기반 스타일링:
+### Tailwind CSS v4
+최신 Tailwind CSS v4 사용:
+```tsx
+// tailwind.config.ts
+import type { Config } from 'tailwindcss'
+
+const config: Config = {
+  content: [
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#268CF5',
+        secondary: '#6B7280',
+        // ...
+      },
+      fontFamily: {
+        sans: ['Work Sans', 'sans-serif'],
+      },
+    },
+  },
+}
+```
+
+### 유틸리티 클래스
+일관된 디자인 시스템:
 ```tsx
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
   <h1 className="text-3xl font-bold text-gray-900">
@@ -321,136 +511,19 @@ const getBidStatus = (bid: Bid) => {
 </div>
 ```
 
-### 인라인 스타일 (Figma 디자인 준수)
-Figma에서 추출한 정확한 디자인 값:
-```tsx
-<button style={{
-  padding: '16px 24px',
-  backgroundColor: '#268CF5',
-  borderRadius: '12px',
-  fontSize: '16px',
-  fontWeight: 600,
-  color: '#FFFFFF',
-  fontFamily: 'Work Sans'
-}}>
-  Submit
-</button>
-```
+### CSS 모듈화
+전역 스타일과 컴포넌트 스타일 분리:
+```css
+/* app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-## ⚙️ 설정 및 실행
-
-### 환경 변수 설정
-
-`.env.local` 파일 생성:
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:4000/api
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-```
-
-### 설치 및 실행
-
-```bash
-# 의존성 설치
-npm install
-
-# 개발 서버 실행
-npm run dev
-
-# 프로덕션 빌드
-npm run build
-
-# 프로덕션 서버 실행
-npm start
-
-# 린트 검사
-npm run lint
-```
-
-개발 서버는 기본적으로 `http://localhost:3000`에서 실행됩니다.
-
-## 🏗 아키텍처 패턴
-
-### Client-Side Rendering (CSR)
-대부분의 페이지는 클라이언트에서 데이터를 페칭하고 렌더링합니다.
-
-### Component-Based Architecture
-```
-Page Component
-  ├── Header Component
-  ├── Main Content
-  │   ├── AuctionCard Component (재사용)
-  │   ├── BidHistory Component
-  │   └── TradeOfferCard Component
-  └── Footer
-```
-
-### State Management
-- **React Hooks**: useState, useEffect, useCallback
-- **Local State**: 각 컴포넌트에서 자체 상태 관리
-- **Props Drilling**: 필요시 props로 데이터 전달
-
-### API Layer Separation
-```
-Component → API Client → Backend API
-```
-
-모든 API 호출은 `lib/api/` 모듈을 통해 중앙화되어 관리됩니다.
-
-## 📱 반응형 디자인
-
-Tailwind의 반응형 유틸리티 사용:
-```tsx
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-  {/* 모바일: 1열, 태블릿: 2열, 데스크탑: 3-4열 */}
-</div>
-```
-
-## 🔄 데이터 흐름
-
-### 1. 경매 상세 페이지 입찰 흐름
-```
-사용자 입력 → placeBid 호출 → 서버 API → Supabase 업데이트
-                                              ↓
-                                    Realtime 구독 트리거
-                                              ↓
-                                    UI 자동 업데이트
-```
-
-### 2. 로그인 흐름
-```
-로그인 폼 → authApi.login → Supabase Auth → 세션 생성
-                                              ↓
-                                         홈으로 리다이렉트
-```
-
-### 3. 출품 흐름
-```
-출품 폼 → createAuction → 서버 API → Supabase Insert
-                                        ↓
-                                  My Bid 페이지로 리다이렉트
-```
-
-## 🎭 사용자 경험 (UX)
-
-### 로딩 상태
-```typescript
-const [submitting, setSubmitting] = useState(false);
-
-// 제출 중 버튼 비활성화
-<button disabled={submitting}>
-  {submitting ? 'Submitting...' : 'Submit'}
-</button>
-```
-
-### 에러 핸들링
-```typescript
-try {
-  await auctionApi.placeBid(itemId, amount, userId);
-  alert('Bid placed successfully!');
-} catch (error) {
-  alert(error instanceof Error ? error.message : 'Failed to place bid');
+/* 커스텀 유틸리티 클래스 */
+@layer components {
+  .btn-primary {
+    @apply px-6 py-3 bg-primary text-white rounded-lg;
+  }
 }
 ```
 
@@ -538,6 +611,102 @@ interface Listing {
   bidCount: number;
   viewCount: number;
 }
+```
+
+### Notification
+```typescript
+interface Notification {
+  id: string;
+  userId: string;
+  type: string;
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt: string;
+  data?: Record<string, any>;
+}
+```
+
+### TradeOffer
+```typescript
+interface TradeOffer {
+  id: string;
+  itemId: string;
+  offererId: string;
+  title: string;
+  description: string;
+  estimatedValue: number;
+  imageUrl: string;
+  status: 'pending' | 'accepted' | 'rejected';
+  createdAt: string;
+}
+```
+
+## 🏗 아키텍처 패턴
+
+### Next.js App Router
+최신 App Router 기반 아키텍처:
+```
+app/
+├── layout.tsx (루트 레이아웃)
+├── page.tsx (루트 페이지)
+├── error.tsx (에러 핸들링)
+├── not-found.tsx (404 처리)
+└── [route]/
+    └── page.tsx (동적 라우트)
+```
+
+### 레이어드 아키텍처
+```
+Presentation Layer (Components)
+         ↓
+Business Logic Layer (Hooks, Context)
+         ↓
+Data Access Layer (API Clients)
+         ↓
+External Services (Backend API, Supabase)
+```
+
+### Component-Based Architecture
+재사용 가능한 컴포넌트 구조:
+```
+Page Component
+  ├── Layout Component
+  │   ├── Header Component
+  │   │   └── NotificationDropdown Component
+  │   └── Footer Component
+  ├── Main Content
+  │   ├── AuctionCard Component (재사용)
+  │   ├── SearchBar Component
+  │   ├── FilterPanel Component
+  │   └── UI Components (Button, Input, etc.)
+  └── Error Boundary
+```
+
+### State Management
+다층 상태 관리:
+```typescript
+// 전역 상태: React Context
+AuthContext - 인증 상태 관리
+
+// 로컬 상태: React Hooks
+useState - 컴포넌트 내부 상태
+useEffect - 사이드 이펙트
+useCallback - 함수 메모이제이션
+useMemo - 값 메모이제이션
+
+// 서버 상태: API Fetching
+useEffect + API Clients
+```
+
+### API Layer Separation
+중앙화된 API 관리:
+```
+Component → API Client → Backend API → Supabase
+                ↓
+         Error Handling
+         Response Transform
+         Token Management
 ```
 
 ## 🧪 개발 팁

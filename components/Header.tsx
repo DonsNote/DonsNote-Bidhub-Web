@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { authApi } from '@/lib/api/auth.api';
+import NotificationDropdown from './NotificationDropdown';
 
 export default function Header() {
   const router = useRouter();
@@ -168,25 +169,8 @@ export default function Header() {
               <div style={{ width: '84px', height: '40px' }} />
             ) : user ? (
               <>
-                {/* Notification Icon */}
-                <button
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    backgroundColor: '#F0F2F5',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    border: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15 6.66667C15 5.34058 14.4732 4.06881 13.5355 3.13113C12.5979 2.19345 11.3261 1.66667 10 1.66667C8.67392 1.66667 7.40215 2.19345 6.46447 3.13113C5.52678 4.06881 5 5.34058 5 6.66667C5 12.5 2.5 14.1667 2.5 14.1667H17.5C17.5 14.1667 15 12.5 15 6.66667Z" stroke="#121417" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M11.4417 17.5C11.2952 17.7526 11.0849 17.9622 10.8319 18.1079C10.5789 18.2537 10.292 18.3304 10 18.3304C9.70802 18.3304 9.42115 18.2537 9.16815 18.1079C8.91515 17.9622 8.70486 17.7526 8.55835 17.5" stroke="#121417" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
+                {/* Notification Dropdown */}
+                <NotificationDropdown user={user} />
 
                 {/* Profile Icon with Dropdown */}
                 <div style={{ position: 'relative' }} data-profile-menu>
