@@ -70,13 +70,14 @@ export default async function Home() {
                   flex: 1
                 }}
               >
-                {featuredItems.map((item) => (
+                {featuredItems.map((item, index) => (
                   <AuctionCard
                     key={item.id}
                     id={item.id}
                     title={item.title}
                     currentBid={`$${item.current_price?.toLocaleString() || '0'}`}
                     imageSrc={item.image_urls?.[0] || '/images/placeholder.png'}
+                    priority={index === 0}
                   />
                 ))}
               </div>
@@ -124,13 +125,14 @@ export default async function Home() {
                 gap: '12px'
               }}
             >
-              {endingSoonItems.map((item) => (
+              {endingSoonItems.map((item, index) => (
                 <AuctionCard
                   key={item.id}
                   id={item.id}
                   title={item.title}
                   currentBid={`$${item.current_price?.toLocaleString() || '0'}`}
                   imageSrc={item.image_urls?.[0] || '/images/placeholder.png'}
+                  priority={index === 0}
                   compact
                 />
               ))}

@@ -7,9 +7,10 @@ interface AuctionCardProps {
   currentBid: string;
   imageSrc: string;
   compact?: boolean;
+  priority?: boolean;
 }
 
-export default function AuctionCard({ id, title, currentBid, imageSrc, compact = false }: AuctionCardProps) {
+export default function AuctionCard({ id, title, currentBid, imageSrc, compact = false, priority = false }: AuctionCardProps) {
   const cardGap = compact ? '12px' : '16px';
   const bottomPadding = compact ? '12px' : '0px';
 
@@ -39,6 +40,8 @@ export default function AuctionCard({ id, title, currentBid, imageSrc, compact =
           src={imageSrc}
           alt={title}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          priority={priority}
           style={{ objectFit: 'cover' }}
         />
       </div>
