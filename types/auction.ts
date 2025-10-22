@@ -9,6 +9,7 @@ export interface Auction {
   image_urls?: string[];
   seller_id: string; // UUID
   winner_id?: string; // UUID
+  highest_bidder_id?: string; // UUID
   category_id?: string; // UUID
   condition?: 'new' | 'like_new' | 'good' | 'fair' | 'poor';
   status: 'draft' | 'active' | 'ended' | 'cancelled' | 'sold';

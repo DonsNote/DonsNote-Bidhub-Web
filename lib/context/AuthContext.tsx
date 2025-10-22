@@ -61,7 +61,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const user = await authApi.login(email, password);
+      const { user } = await authApi.signInWithEmail(email, password);
       setUser(user);
     } catch (error) {
       console.error('Sign in error:', error);
@@ -71,7 +71,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const signOut = async () => {
     try {
-      await authApi.logout();
+      await authApi.signOut();
       setUser(null);
     } catch (error) {
       console.error('Sign out error:', error);

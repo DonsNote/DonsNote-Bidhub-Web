@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 interface AuctionCardProps {
-  id: number;
+  id: string;
   title: string;
   currentBid: string;
   imageSrc: string;
